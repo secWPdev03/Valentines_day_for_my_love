@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: #fff5f7;
+            overflow: hidden; /* Prevents scrollbars from the falling hearts */
+        }
+
+        #content-area {
+            width: 80%;
+            max-width: 400px;
+            z-index: 10; /* Keeps content above the hearts */
+        }
+
+        #progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            margin-top: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 25px;
+            background-color: #ff4d6d;
+            color: white;
+            line-height: 25px;
+            font-weight: bold;
+            transition: width 0.1s;
+        }
+
+        /* Heart Animation Styling */
+        .heart {
+            position: fixed;
+            top: -10%;
+            color: #ff4d6d;
+            font-size: 20px;
+            user-select: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="content-area">
+        <h2>System Scan</h2>
+        <button id="start-btn" onclick="startLoading()">Scan Device for Threats</button>
+    </div>
+
+    <script>
+        function startLoading() {
+            const container = document.getElementById('content-area');
+            
+            container.innerHTML = `
+                <h2 style="color: #d63384;">Scanning for Malware...</h2>
+                <div id="progress-container">
+                    <div id="progress-bar">0%</div>
+                </div>
+                <p id="status-text">Checking system files...</p>
+            `;
+
+            const bar = document.getElementById('progress-bar');
+            const status = document.getElementById('status-text');
+            let width = 0;
+
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    showSurprise(container);
+                } else {
+                    width++;
+                    bar.style.width = width + '%';
+                    bar.innerHTML = width + '%';
+                    
+                    // Fun status changes
+                    if(width === 30) status.innerText = "Accessing private folders...";
+                    if(width === 60) status.innerText = "Downloading 'Love_Virus.exe'...";
+                    if(width === 90) status.innerText = "Encrypting your heart...";
+                }
+            }, 50); 
+        }
+
+        function showSurprise(container) {
+            container.innerHTML = `
+                <img src='Bubu_dudu.gif' alt='Love GIF' style="width: 200px; border-radius: 15px;">
+                <h1 style="color: #ff4d6d; margin-top: 15px;">Infection Complete!</h1>
+                <p style="font-size: 1.2em;">Your device is now infected by a Love Virus!</p>
+                <h2 style="color: #d63384;">Happy Valentine's Day! ❤️</h2>
+            `;
+            
+            // Start the heart shower!
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️'; // You can mix in '💖' or '💗' too!
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (Math.random() * 3 + 2) + "s"; // 2-5 seconds
+            heart.style.opacity = Math.random();
+            
+            document.body.appendChild(heart);
+
+            // Remove heart after it falls to keep the page clean
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>
